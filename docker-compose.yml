@@ -1,0 +1,21 @@
+services:
+  # server:
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    container_name: docker-training-web-container
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - docker-training-network
+
+networks:
+  docker-training-network:
+    driver: bridge
