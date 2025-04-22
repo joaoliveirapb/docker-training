@@ -1,5 +1,20 @@
 services:
-  # server:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: docker-training-server-container
+    ports:
+      - "3333:3333"
+    volumes: # Deletar "volumes" em production
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - ./server/.env
+    networks:
+      - docker-training-network
 
   web:
     build:
@@ -7,12 +22,15 @@ services:
       dockerfile: Dockerfile.dev
     container_name: docker-training-web-container
     ports:
-      - "5173:5173"
-    volumes:
+      - "5173:5173" # Development
+      # - "80:80" # Production
+    volumes: # Deletar "volumes" em production
       - ./web:/app
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - ./web/.env
     networks:
       - docker-training-network
 
